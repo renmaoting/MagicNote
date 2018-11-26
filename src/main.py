@@ -2,16 +2,15 @@
 # -*- coding: UTF-8 -*-
 from Tkinter import *
 
-from src.browsePage import BrowsePage
-from src.createPage import CreatePage
+from src.constants import WIN_HEIGHT, WIN_WIDTH
 from src.fileUtil import FileUtil
 from src.searchPage import SearchPage
 
 
 class MagicNote(object):
     def __init__(self):
-        self.width = 800
-        self.height = 600
+        self.width = WIN_WIDTH
+        self.height = WIN_HEIGHT
         self.root = Tk()
         self.root.title('Magic Note')
         self.root.geometry(self.getMainWinSize())
