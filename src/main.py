@@ -2,7 +2,10 @@
 # -*- coding: UTF-8 -*-
 from Tkinter import *
 
+from tkinter import messagebox
+
 from src.constants import WIN_HEIGHT, WIN_WIDTH
+from src.createPage import CreatePage
 from src.fileUtil import FileUtil
 from src.searchPage import SearchPage
 
@@ -14,15 +17,17 @@ class MagicNote(object):
         self.root = Tk()
         self.root.title('Magic Note')
         self.root.geometry(self.getMainWinSize())
-        self.frm = Frame(self.root, width=self.width, height=self.height, bg='green')
-        self.frm.place(x=0, y=50)
-        Label(self.frm, text='Input Password:').place(x=200, y=200, anchor='nw')
+        self.frm = Frame(self.root, width=self.width, height=self.height)
+        self.frm.place(x=0, y=0)
 
-        self.entry = Entry(self.frm, width=10)
-        self.entry.place(x=310, y=200)
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Verify Password')
+        self.lf1.grid(row=0, column=0, padx=350, pady=300)
 
-        self.submit = Button(self.frm, text='Submit', command=self.verifyPassword)
-        self.submit.place(x=420, y=200)
+        self.entry = Entry(self.lf1)
+        self.entry.grid(row=0, column=0)
+
+        self.submit = Button(self.lf1, text='Submit', command=self.verifyPassword)
+        self.submit.grid(row=1, column=0)
 
     def verifyPassword(self):
         userInput = str(self.entry.get())
@@ -30,10 +35,12 @@ class MagicNote(object):
             self.frm.destroy()
             self.frm = Frame(self.root, width=self.width, height=self.height)
             self.frm.place(x=0, y=0)
-            SearchPage(self.frm)
+            #SearchPage(self.frm)
+            CreatePage(self.frm)
+            #self.createMenu()
 
         else:
-            print 'no'
+            messagebox.showerror('Error', 'Invalid Password!')
 
     def getMainWinSize(self):
         screenwidth = self.root.winfo_screenwidth()
@@ -42,25 +49,15 @@ class MagicNote(object):
 
     def createMenu(self):
         menubar = Menu(self.root)
-        menubar.add_command(label='Create Notes', command=self.createNoteWin)
-        menubar.add_command(label='Search Notes', command=self.createSearchWin)
+        menubar.add_command(label='Create Notes', command=CreatePage)
+        menubar.add_command(label='Search Notes', command=SearchPage)
         self.root.config(menu=menubar)
         mainloop()
 
-    def createSearchWin(self):
-        self.frm.destroy()
-        self.frm = Frame(self.root, width=self.width, height=self.height)
-        self.frm.place(x=0, y=0)
-
-    def createNoteWin(self):
-        self.frm = Frame(self.root, width=self.width, height=self.height)
-        self.frm.place(x=0, y=0)
-        CreatePage(self.frm)
 
 def main():
-    note = MagicNote()
+    MagicNote()
     mainloop()
-    pass
 
 
 if __name__ == '__main__':

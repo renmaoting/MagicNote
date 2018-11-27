@@ -19,9 +19,16 @@ class FileUtil(object):
             return ret
 
     @staticmethod
-    def getNoteRecords():
-        json_data = io.open(NOTES_FILE_PATH, encoding='utf-8').read()
+    def getNoteRecords(filePath = NOTES_FILE_PATH):
+        json_data = io.open(filePath, encoding='utf-8').read()
         print(type(json_data))
         # json调用loads()方法将字符串数据转换成列表
         data = json.loads(json_data)
         return data
+
+    @staticmethod
+    def setNoteRecords(data, filePath = NOTES_FILE_PATH):
+        dic_json = json.dumps(data, ensure_ascii=False, indent=4)
+        fw = io.open(filePath, 'w', encoding='utf-8')
+        fw.write(dic_json)
+        fw.close()
