@@ -7,6 +7,7 @@ from tkinter import messagebox
 from src.constants import WIN_HEIGHT, WIN_WIDTH
 from src.createPage import CreatePage
 from src.fileUtil import FileUtil
+from src.landingPage import LandingPage
 from src.searchPage import SearchPage
 
 
@@ -35,9 +36,7 @@ class MagicNote(object):
             self.frm.destroy()
             self.frm = Frame(self.root, width=self.width, height=self.height)
             self.frm.place(x=0, y=0)
-            #SearchPage(self.frm)
-            CreatePage(self.frm)
-            #self.createMenu()
+            LandingPage(self.root)
 
         else:
             messagebox.showerror('Error', 'Invalid Password!')

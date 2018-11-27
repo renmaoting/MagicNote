@@ -15,7 +15,9 @@ class SearchPage(object):
     def __init__(self, master):
         self.data = FileUtil.getNoteRecords()
         self.searchResult = []
-        self.lf1 = LabelFrame(master, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3-10, text='Search')
+        self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
+        self.frm.place(x=0, y=0)
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3-10, text='Search')
         self.lf1.grid(row=0, column=0, padx=10, pady=10)
 
         self.titleLabel = Label(self.lf1, text='TiTle:').grid(row=0, column=0)
@@ -42,9 +44,10 @@ class SearchPage(object):
         self.dateEndEntry.insert(END, '2018-12-15')
 
         self.searchBtn = Button(self.lf1, text='Search', command=self.searchNotes).grid(row=4, column=1)
+        self.homeBtn = Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=4, column=2)
 
         # labelFrame 用于盛放笔记列表
-        self.lf2 = LabelFrame(master, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 210, text='Note List')
+        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 210, text='Note List')
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
@@ -55,7 +58,7 @@ class SearchPage(object):
         self.listb.bind('<<ListboxSelect>>', self.selectNote)  # 绑定响应函数
 
         # 显示笔记详细信息
-        self.lf3 = LabelFrame(master, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
+        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
         self.detail = Text(self.lf3, bg='#E0FFFF')
         self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-50)
@@ -119,3 +122,6 @@ class SearchPage(object):
     # 选择tags
     def selectTags(self, *args):
         self.tagEntry.insert(END, self.tagChosen.get() + ' ')
+
+    def landingPage(self):
+        self.frm.destroy()
