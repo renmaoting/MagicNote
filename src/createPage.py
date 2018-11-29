@@ -1,25 +1,24 @@
-#!/usr/bin/python
+#!python3
 # -*- coding: UTF-8 -*-
 import datetime
-from Tkinter import *
-from tkFileDialog import askopenfilename
+from importlib import reload
+from tkinter import *
 
 from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
 
 from src.constants import WIN_WIDTH, WIN_HEIGHT
 from src.fileUtil import FileUtil
 
 reload(sys)
-sys.setdefaultencoding("utf-8")
 
 
 class CreatePage(object):
-    def __init__(self, master):
-        self.data = FileUtil.getNoteRecords()
+    def __init__(self, master, updateList, data):
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
         self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Create Note')
-        self.lf1.grid(row=0, column=0, padx=30, pady=100)
+        self.lf1.grid(row=0, column=0, padx=30, pady=90)
 
         Label(self.lf1, text='Title:').grid(row=0)
         self.title = Entry(self.lf1, width=80)
@@ -32,20 +31,27 @@ class CreatePage(object):
         self.description = Text(self.lf1, width=120, height=30, bg='#E0FFFF')
         self.description.grid(row=2, column=1, columnspan=10, pady=10)
 
-        Button(self.lf1, text='Import Existing Notes', command=self.chooseFile).grid(row=3, column=4)
-        Button(self.lf1, text='Submit New Note', command=self.addNote).grid(row=3, column=5)
+        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=4)
+        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=5)
         Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=3, column=6)
 
     # 导入notes
-    def chooseFile(self):
+    def chooseFile(self, updateList, data):
         path = askopenfilename()
+        if len(path.strip()) == 0:
+            return
+
         importedNotes = FileUtil.getNoteRecords(path)
+        if len(importedNotes) == 0:
+            return
+
         for item in importedNotes:
-            self.data.append(item)
-        FileUtil.setNoteRecords(self.data)
+            data.append(item)
+        FileUtil.setNoteRecords(data)
+        updateList(data)
         messagebox.showerror('Succeed', 'Notes have been imported!')
 
-    def addNote(self):
+    def addNote(self, updateList, data):
         curTime = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         titleVal = self.title.get()
         tagsVal = self.tags.get().replace(' ', '').split(',')
@@ -56,11 +62,11 @@ class CreatePage(object):
             return
 
         note = {'title': titleVal, 'tags': tagsVal, 'description': descriptionVal, 'time': curTime}
-        data = FileUtil.getNoteRecords()
         data.insert(0, note)
 
         FileUtil.setNoteRecords(data)
         messagebox.showerror('Succeed', 'Note has been added!')
+        updateList(data)
 
         self.title.delete(0, END)
         self.tags.delete(0, END)

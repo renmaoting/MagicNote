@@ -1,19 +1,16 @@
-#!/usr/bin/python
+#!python3
 # -*- coding: UTF-8 -*-
-
-from Tkinter import *
-from ttk import Combobox
+from importlib import reload
+from tkinter import *
+from tkinter.ttk import Combobox
 
 from src.constants import WIN_WIDTH, WIN_HEIGHT
-from src.fileUtil import FileUtil
 
 reload(sys)
-sys.setdefaultencoding("utf-8")
 
 
 class SearchPage(object):
-    def __init__(self, master):
-        self.data = FileUtil.getNoteRecords()
+    def __init__(self, master, data):
         self.searchResult = []
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
@@ -21,29 +18,29 @@ class SearchPage(object):
         self.lf1.grid(row=0, column=0, padx=10, pady=10)
 
         self.titleLabel = Label(self.lf1, text='TiTle:').grid(row=0, column=0)
-        self.titleEntry = Entry(self.lf1, width=30)
-        self.titleEntry.grid(row=0, column=1)
+        self.titleEntry = Entry(self.lf1, width=45)
+        self.titleEntry.grid(row=0, column=1, columnspan=9)
 
         self.tagLabel = Label(self.lf1, text='Tags:').grid(row=1, column=0)
         # 下拉框，用于选择tags
         self.tag = StringVar()
-        self.tagChosen = Combobox(self.lf1, width=20, textvariable=self.tag)
+        self.tagChosen = Combobox(self.lf1, textvariable=self.tag)
         self.tagChosen.bind("<<ComboboxSelected>>", self.selectTags)
-        self.tags = self.getTags()
+        self.tags = self.getTags(data)
         self.tagChosen['values'] = tuple(self.tags)
         self.tagChosen.grid(row=1, column=1)
         self.tagEntry = Entry(self.lf1, width=50)
-        self.tagEntry.grid(row=2, column=0, columnspan=3)
+        self.tagEntry.grid(row=2, column=0, columnspan=10)
 
         self.dateLabel = Label(self.lf1, text='Date:').grid(row=3, column=0)
-        self.dateStartEntry = Entry(self.lf1, width=10)
-        self.dateStartEntry.grid(row=3, column=1)
+        self.dateStartEntry = Entry(self.lf1)
+        self.dateStartEntry.grid(row=3, column=1, columnspan=1)
         self.dateStartEntry.insert(END, '2018-08-06')
-        self.dateEndEntry = Entry(self.lf1, width=10)
-        self.dateEndEntry.grid(row=3, column=2)
+        self.dateEndEntry = Entry(self.lf1)
+        self.dateEndEntry.grid(row=3, column=2, columnspan=1)
         self.dateEndEntry.insert(END, '2018-12-15')
 
-        self.searchBtn = Button(self.lf1, text='Search', command=self.searchNotes).grid(row=4, column=1)
+        self.searchBtn = Button(self.lf1, text='Search', command=lambda: self.searchNotes(data)).grid(row=4, column=1)
         self.homeBtn = Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=4, column=2)
 
         # labelFrame 用于盛放笔记列表
@@ -51,11 +48,15 @@ class SearchPage(object):
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 230)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 260)
+        self.countLabel = Label(self.lf2, bg='#E0FFFF')
+        self.countLabel.place(x=200, y=543)
+        self.updateCountLabel()
         yscrollbar = Scrollbar(self.listb, command=self.listb.yview)
         yscrollbar.pack(side=RIGHT, fill=Y)
         self.listb.config(yscrollcommand=yscrollbar.set)
         self.listb.bind('<<ListboxSelect>>', self.selectNote)  # 绑定响应函数
+
 
         # 显示笔记详细信息
         self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
@@ -76,15 +77,15 @@ class SearchPage(object):
         self.detail.insert(END, self.searchResult[index]['description'])
 
     # 得到所有的tags用于用户选择
-    def getTags(self):
-        tags = set(' ')
-        for item in self.data:
+    def getTags(self, data):
+        tags = set('')
+        for item in data:
             for tag in item['tags']:
                 tags.add(tag)
         return tags
 
     # 根据title，tags，时间筛选记录
-    def searchNotes(self):
+    def searchNotes(self, data):
         self.listb.delete(0, END)
         titleStr = self.titleEntry.get()
         startDate = self.dateStartEntry.get()
@@ -93,7 +94,7 @@ class SearchPage(object):
 
         self.searchResult = []
 
-        for item in self.data:
+        for item in data:
             # 如果包含title数据，但是当前记录title和搜索条件不一致，则跳过此条记录
             if len(titleStr.strip()) != 0 and item['title'] != titleStr:
                 continue
@@ -118,10 +119,16 @@ class SearchPage(object):
             self.searchResult.append(item)
         for item in self.searchResult:  # 最近的数据在最前面
             self.listb.insert(END, item['title'])
+        self.updateCountLabel()
 
     # 选择tags
     def selectTags(self, *args):
         self.tagEntry.insert(END, self.tagChosen.get() + ' ')
 
+    # 返回主界面
     def landingPage(self):
         self.frm.destroy()
+
+    # 更新笔记列表下方搜索结果数量
+    def updateCountLabel(self):
+        self.countLabel['text'] = 'Total: ' + str(len(self.searchResult))
