@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfilename
 
-from src.constants import WIN_WIDTH, WIN_HEIGHT
+from src.constants import WIN_HEIGHT, WIN_WIDTH
 from src.fileUtil import FileUtil
 
 reload(sys)

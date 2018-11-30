@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import datetime
 from importlib import reload
 from tkinter import *
+from tkinter import messagebox
 
 from src.constants import WIN_WIDTH, WIN_HEIGHT
 from src.createPage import CreatePage
@@ -45,7 +47,8 @@ class LandingPage(object):
         self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
         self.detail = Text(self.lf3, bg='#E0FFFF')
-        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-50)
+        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-80)
+        self.saveBtn = Button(self.lf3, text='Save', command=self.saveNote).place(x=230, y=720)
 
     # 点击笔记列表显示详细信息
     def selectNote(self, event):
@@ -60,7 +63,7 @@ class LandingPage(object):
         self.detail.insert(END, self.data[self.selectedItemIndex]['description'])
 
     def searchPage(self, master):
-        SearchPage(master, self.data    )
+        SearchPage(master, self.data)
 
     def createPage(self, master):
         CreatePage(master, self.updateNoteList, self.data)
@@ -85,3 +88,23 @@ class LandingPage(object):
             FileUtil.clearNote()  # 清空文件
         self.updateNoteList(self.data)
         self.selectedItemIndex = -1
+
+    def saveNote(self):
+        detailVal = self.detail.get(0.0, END).split('\n')
+        if len(detailVal) < 5:  # 至少包含5行才是合法数据
+            print("invalid data!")
+            return
+        curTime = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+
+        titleVal = detailVal[0].strip()
+        tagsVal = detailVal[1].strip().split(',')
+        descriptionVal = ''.join(detailVal[4:])
+
+        if len(titleVal) == 0 or len(tagsVal) == 0 or len(descriptionVal.strip()) == 0:
+            print("invalid data!")
+            return
+
+        note = {'title': titleVal, 'tags': tagsVal, 'description': descriptionVal, 'time': curTime}
+        self.data[self.selectedItemIndex] = note
+        FileUtil.setNoteRecords(self.data)
+        self.updateNoteList(self.data)
