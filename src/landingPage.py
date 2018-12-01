@@ -3,7 +3,6 @@
 import datetime
 from importlib import reload
 from tkinter import *
-from tkinter import messagebox
 
 from src.constants import WIN_WIDTH, WIN_HEIGHT
 from src.createPage import CreatePage
@@ -15,21 +14,27 @@ reload(sys)
 
 class LandingPage(object):
     def __init__(self, master, data):
+        self.initial(master, data)
+
+    def initial(self, master, data):
         self.data = data
         self.selectedItemIndex = -1
-        self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT).place(x=0, y=0)
-        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3-10, text='Options')
+        self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
+        self.frm.place(x=0, y=0)
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT / 3 - 10, text='Options')
         self.lf1.grid(row=0, column=0, padx=10, pady=10)
 
-        self.createBtn = Button(self.lf1, text='Create Notes', command=lambda: self.createPage(master)).grid(row=0, column=0)
-        self.searchBtn = Button(self.lf1, text='Search Notes', command=lambda: self.searchPage(master)).grid(row=0, column=1)
+        self.createBtn = Button(self.lf1, text='Create Notes', command=lambda: self.createPage(master)).grid(row=0,
+                                                                                                             column=0)
+        self.searchBtn = Button(self.lf1, text='Search Notes', command=lambda: self.searchPage(master)).grid(row=0,
+                                                                                                             column=1)
 
         # labelFrame 用于盛放笔记列表
-        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 100, text='Note List')
+        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT - 100, text='Note List')
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 155)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH / 2 - 30, height=WIN_HEIGHT - 155)
 
         self.deleteBtn = Button(self.lf2, text='Delete Note', command=self.deleteNote)
         self.deleteBtn.place(x=160, y=452)
@@ -44,10 +49,10 @@ class LandingPage(object):
         self.listb.bind('<<ListboxSelect>>', self.selectNote)  # 绑定响应函数
 
         # 显示笔记详细信息
-        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
+        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT - 30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
         self.detail = Text(self.lf3, bg='#E0FFFF')
-        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-78)
+        self.detail.place(x=0, y=0, width=WIN_WIDTH / 2 - 30, height=WIN_HEIGHT - 78)
         self.saveBtn = Button(self.lf3, text='Save', command=self.saveNote).place(x=170, y=522)
 
     # 点击笔记列表显示详细信息
@@ -66,7 +71,8 @@ class LandingPage(object):
         SearchPage(master, self.data)
 
     def createPage(self, master):
-        CreatePage(master, self.updateNoteList, self.data)
+        CreatePage(master, self.updateNoteList, self.initial, self.data)
+        self.frm.destroy()
 
     def updateNoteList(self, data):
         self.listb.delete(0, END)
