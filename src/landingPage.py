@@ -71,7 +71,7 @@ class LandingPage(object):
         SearchPage(master, self.data)
 
     def createPage(self, master):
-        CreatePage(master, self.updateNoteList, self.initial, self.data)
+        CreatePage(master, self.initial, self.data)
         self.frm.destroy()
 
     def updateNoteList(self, data):

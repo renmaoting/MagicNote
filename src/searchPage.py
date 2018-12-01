@@ -48,9 +48,9 @@ class SearchPage(object):
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 205)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 230)
         self.countLabel = Label(self.lf2, bg='#E0FFFF')
-        self.countLabel.place(x=200, y=543)
+        self.countLabel.place(x=140, y=375)
         self.updateCountLabel()
         yscrollbar = Scrollbar(self.listb, command=self.listb.yview)
         yscrollbar.pack(side=RIGHT, fill=Y)

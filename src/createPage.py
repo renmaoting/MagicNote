@@ -14,7 +14,7 @@ reload(sys)
 
 
 class CreatePage(object):
-    def __init__(self, master, updateList, initialLandingPage, data):
+    def __init__(self, master, initialLandingPage, data):
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
         self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Create Note')
@@ -31,12 +31,12 @@ class CreatePage(object):
         self.description = Text(self.lf1, width=90, height=27, bg='#E0FFFF')
         self.description.grid(row=2, column=1, columnspan=6, pady=6)
 
-        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=2)
-        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=3)
+        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(data)).grid(row=3, column=2)
+        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(data)).grid(row=3, column=3)
         Button(self.lf1, text='Home Page', command=lambda: self.landingPage(initialLandingPage, master, data)).grid(row=3, column=5)
 
     # 导入notes
-    def chooseFile(self, updateList, data):
+    def chooseFile(self, data):
         path = askopenfilename()
         if len(path.strip()) == 0:
             return
@@ -48,10 +48,9 @@ class CreatePage(object):
         for item in importedNotes:
             data.append(item)
         FileUtil.setNoteRecords(data)
-        updateList(data)
         messagebox.showerror('Succeed', 'Notes have been imported!')
 
-    def addNote(self, updateList, data):
+    def addNote(self, data):
         curTime = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         titleVal = self.title.get()
         tagsVal = self.tags.get().replace(' ', '').split(',')
@@ -66,7 +65,6 @@ class CreatePage(object):
 
         FileUtil.setNoteRecords(data)
         messagebox.showerror('Succeed', 'Note has been added!')
-        updateList(data)
 
         self.title.delete(0, END)
         self.tags.delete(0, END)
