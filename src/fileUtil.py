@@ -20,6 +20,7 @@ class FileUtil(object):
         if not os.path.exists(PASSWORD_FILE_PATH):
             with open(PASSWORD_FILE_PATH, 'w') as f:  # 初始密码是'12345'
                 f.write('12345')
+                return '12345'
 
         with open(PASSWORD_FILE_PATH, 'r') as fileReader:
             ret = fileReader.read()

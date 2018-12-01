@@ -18,22 +18,22 @@ class CreatePage(object):
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
         self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Create Note')
-        self.lf1.grid(row=0, column=0, padx=30, pady=90)
+        self.lf1.grid(row=0, column=0, padx=30, pady=20)
 
         Label(self.lf1, text='Title:').grid(row=0)
-        self.title = Entry(self.lf1, width=80)
-        self.title.grid(row=0, column=1, columnspan=8, pady=10)
+        self.title = Entry(self.lf1, width=70)
+        self.title.grid(row=0, column=1, columnspan=8, pady=6)
 
         Label(self.lf1, text='Tags:').grid(row=1, column=0)
-        self.tags = Entry(self.lf1, width=80)
-        self.tags.grid(row=1, column=1, columnspan=8, pady=10)
+        self.tags = Entry(self.lf1, width=70)
+        self.tags.grid(row=1, column=1, columnspan=8, pady=6)
         Label(self.lf1, text='Description:').grid(row=2, column=0)
-        self.description = Text(self.lf1, width=120, height=30, bg='#E0FFFF')
-        self.description.grid(row=2, column=1, columnspan=10, pady=10)
+        self.description = Text(self.lf1, width=90, height=27, bg='#E0FFFF')
+        self.description.grid(row=2, column=1, columnspan=6, pady=6)
 
-        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=4)
-        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=5)
-        Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=3, column=6)
+        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=3)
+        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=4)
+        Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=3, column=5)
 
     # 导入notes
     def chooseFile(self, updateList, data):

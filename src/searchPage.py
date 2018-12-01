@@ -14,11 +14,11 @@ class SearchPage(object):
         self.searchResult = []
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
-        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3-10, text='Search')
-        self.lf1.grid(row=0, column=0, padx=10, pady=10)
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3, text='Search')
+        self.lf1.grid(row=0, column=0, padx=10, pady=5)
 
         self.titleLabel = Label(self.lf1, text='TiTle:').grid(row=0, column=0)
-        self.titleEntry = Entry(self.lf1, width=45)
+        self.titleEntry = Entry(self.lf1, width=33)
         self.titleEntry.grid(row=0, column=1, columnspan=9)
 
         self.tagLabel = Label(self.lf1, text='Tags:').grid(row=1, column=0)
@@ -29,26 +29,26 @@ class SearchPage(object):
         self.tags = self.getTags(data)
         self.tagChosen['values'] = tuple(self.tags)
         self.tagChosen.grid(row=1, column=1)
-        self.tagEntry = Entry(self.lf1, width=50)
+        self.tagEntry = Entry(self.lf1, width=38)
         self.tagEntry.grid(row=2, column=0, columnspan=10)
 
         self.dateLabel = Label(self.lf1, text='Date:').grid(row=3, column=0)
-        self.dateStartEntry = Entry(self.lf1)
-        self.dateStartEntry.grid(row=3, column=1, columnspan=1)
+        self.dateStartEntry = Entry(self.lf1, width=10)
+        self.dateStartEntry.grid(row=3, column=1)
         self.dateStartEntry.insert(END, '2018-08-06')
-        self.dateEndEntry = Entry(self.lf1)
-        self.dateEndEntry.grid(row=3, column=2, columnspan=1)
+        self.dateEndEntry = Entry(self.lf1, width=10)
+        self.dateEndEntry.grid(row=3, column=2)
         self.dateEndEntry.insert(END, '2018-12-15')
 
         self.searchBtn = Button(self.lf1, text='Search', command=lambda: self.searchNotes(data)).grid(row=4, column=1)
         self.homeBtn = Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=4, column=2)
 
         # labelFrame 用于盛放笔记列表
-        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 210, text='Note List')
+        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 180, text='Note List')
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 260)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 205)
         self.countLabel = Label(self.lf2, bg='#E0FFFF')
         self.countLabel.place(x=200, y=543)
         self.updateCountLabel()
