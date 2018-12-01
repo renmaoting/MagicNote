@@ -17,10 +17,9 @@ class FileUtil(object):
     def getPassword():
         if not os.path.exists(DATA_PATH):
             os.mkdir(DATA_PATH)
-            if not os.path.exists(PASSWORD_FILE_PATH):
-                with open(PASSWORD_FILE_PATH, 'w') as f:  # 初始密码是'54321'
-                    f.write('54321')
-                return '54321'
+        if not os.path.exists(PASSWORD_FILE_PATH):
+            with open(PASSWORD_FILE_PATH, 'w') as f:  # 初始密码是'12345'
+                f.write('12345')
 
         with open(PASSWORD_FILE_PATH, 'r') as fileReader:
             ret = fileReader.read()
