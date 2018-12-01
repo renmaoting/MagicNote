@@ -18,7 +18,7 @@ class CreatePage(object):
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
         self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Create Note')
-        self.lf1.grid(row=0, column=0, padx=30, pady=20)
+        self.lf1.grid(row=0, column=0, padx=40, pady=30)
 
         Label(self.lf1, text='Title:').grid(row=0)
         self.title = Entry(self.lf1, width=70)
@@ -31,9 +31,9 @@ class CreatePage(object):
         self.description = Text(self.lf1, width=90, height=27, bg='#E0FFFF')
         self.description.grid(row=2, column=1, columnspan=6, pady=6)
 
-        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=3)
-        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=4)
-        Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=3, column=5)
+        Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(updateList, data)).grid(row=3, column=2)
+        Button(self.lf1, text='Submit New Note', command=lambda: self.addNote(updateList, data)).grid(row=3, column=3)
+        Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=3, column=4)
 
     # 导入notes
     def chooseFile(self, updateList, data):

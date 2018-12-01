@@ -29,13 +29,13 @@ class LandingPage(object):
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 150)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 155)
 
         self.deleteBtn = Button(self.lf2, text='Delete Note', command=self.deleteNote)
-        self.deleteBtn.place(x=160, y=455)
+        self.deleteBtn.place(x=160, y=452)
         self.countLabel = Label(self.lf2, bg='#E0FFFF')
         self.updateCountLabel()
-        self.countLabel.place(x=65, y=455)
+        self.countLabel.place(x=65, y=452)
         self.updateNoteList(self.data)
 
         yscrollbar = Scrollbar(self.listb, command=self.listb.yview)
@@ -47,8 +47,8 @@ class LandingPage(object):
         self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
         self.detail = Text(self.lf3, bg='#E0FFFF')
-        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-75)
-        self.saveBtn = Button(self.lf3, text='Save', command=self.saveNote).place(x=170, y=525)
+        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-78)
+        self.saveBtn = Button(self.lf3, text='Save', command=self.saveNote).place(x=170, y=522)
 
     # 点击笔记列表显示详细信息
     def selectNote(self, event):
