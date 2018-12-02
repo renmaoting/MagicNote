@@ -14,12 +14,12 @@ class SearchPage(object):
         self.searchResult = []
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
-        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT/3, text='Search')
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH/3, height=WIN_HEIGHT/3, text='Search')
         self.lf1.grid(row=0, column=0, padx=10, pady=5)
 
         self.titleLabel = Label(self.lf1, text='TiTle:').grid(row=0, column=0)
         self.titleEntry = Entry(self.lf1, width=33)
-        self.titleEntry.grid(row=0, column=1, columnspan=9)
+        self.titleEntry.grid(row=0, column=1, columnspan=5)
 
         self.tagLabel = Label(self.lf1, text='Tags:').grid(row=1, column=0)
         # 下拉框，用于选择tags
@@ -30,7 +30,7 @@ class SearchPage(object):
         self.tagChosen['values'] = tuple(self.tags)
         self.tagChosen.grid(row=1, column=1)
         self.tagEntry = Entry(self.lf1, width=38)
-        self.tagEntry.grid(row=2, column=0, columnspan=10)
+        self.tagEntry.grid(row=2, column=0, columnspan=6)
 
         self.dateLabel = Label(self.lf1, text='Date:').grid(row=3, column=0)
         self.dateStartEntry = Entry(self.lf1, width=10)
@@ -44,11 +44,11 @@ class SearchPage(object):
         self.homeBtn = Button(self.lf1, text='Home Page', command=self.landingPage).grid(row=4, column=2)
 
         # labelFrame 用于盛放笔记列表
-        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT - 180, text='Note List')
+        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH/3+60, height=WIN_HEIGHT - 180, text='Note List')
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT - 230)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH/3 + 50, height=WIN_HEIGHT - 230)
         self.countLabel = Label(self.lf2, bg='#E0FFFF')
         self.countLabel.place(x=140, y=375)
         self.updateCountLabel()
@@ -59,22 +59,24 @@ class SearchPage(object):
 
 
         # 显示笔记详细信息
-        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH/2-20, height=WIN_HEIGHT-30, text='Note Details')
+        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH*2/3-100, height=WIN_HEIGHT-30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
-        self.detail = Text(self.lf3, bg='#E0FFFF')
-        self.detail.place(x=0, y=0, width=WIN_WIDTH/2-30, height=WIN_HEIGHT-50)
+        self.detail = Text(self.lf3, bg='#E0FFFF', font=("宋体", 14, "normal"), state='disabled')
+        self.detail.place(x=0, y=0, width=WIN_WIDTH*2/3-110, height=WIN_HEIGHT-50)
 
     # 点击笔记列表显示详细信息
     def selectNote(self, event):
         w = event.widget
         index = int(w.curselection()[0])
+        editTime = self.searchResult[index]['time']
+        timeStr = editTime[0:4] + '-' + editTime[4:6] + '-' + editTime[6:8] + ' ' + editTime[8:10] + ':' + editTime[10:12] + ':' + editTime[12:14]
+        self.detail.config(state='normal')
         self.detail.delete('1.0', END)
         self.detail.insert(INSERT, '\t\t\t' + self.searchResult[index]['title'] + '\n')
         self.detail.insert(END, '\t\t' + ','.join(self.searchResult[index]['tags']) + '\n')
-        editTime = self.searchResult[index]['time']
-        timeStr = editTime[0:4] + '-' + editTime[4:6] + '-' + editTime[6:8] + ' ' + editTime[8:10] + ':' + editTime[10:12] + ':' + editTime[12:14]
         self.detail.insert(END, '\t\t' + timeStr + '\n\n')
         self.detail.insert(END, self.searchResult[index]['description'])
+        self.detail.config(state='disabled')
 
     # 得到所有的tags用于用户选择
     def getTags(self, data):

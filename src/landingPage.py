@@ -3,6 +3,7 @@
 import datetime
 from importlib import reload
 from tkinter import *
+from tkinter import messagebox
 
 from src.constants import WIN_WIDTH, WIN_HEIGHT
 from src.createPage import CreatePage
@@ -21,7 +22,7 @@ class LandingPage(object):
         self.selectedItemIndex = -1
         self.frm = Frame(master, width=WIN_HEIGHT, height=WIN_HEIGHT)
         self.frm.place(x=0, y=0)
-        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT / 3 - 10, text='Options')
+        self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH / 3, height=WIN_HEIGHT / 3 - 10, text='Options')
         self.lf1.grid(row=0, column=0, padx=10, pady=10)
 
         self.createBtn = Button(self.lf1, text='Create Notes', command=lambda: self.createPage(master)).grid(row=0,
@@ -30,11 +31,11 @@ class LandingPage(object):
                                                                                                              column=1)
 
         # labelFrame 用于盛放笔记列表
-        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT - 100, text='Note List')
+        self.lf2 = LabelFrame(self.frm, width=WIN_WIDTH / 3, height=WIN_HEIGHT - 100, text='Note List')
         self.lf2.grid(row=1, column=0, padx=10)
 
         self.listb = Listbox(self.lf2, bg='#E0FFFF')  # list 用于放note 列表
-        self.listb.place(x=0, y=0, width=WIN_WIDTH / 2 - 30, height=WIN_HEIGHT - 155)
+        self.listb.place(x=0, y=0, width=WIN_WIDTH / 3 - 10, height=WIN_HEIGHT - 155)
 
         self.deleteBtn = Button(self.lf2, text='Delete Note', command=self.deleteNote)
         self.deleteBtn.place(x=160, y=452)
@@ -49,23 +50,27 @@ class LandingPage(object):
         self.listb.bind('<<ListboxSelect>>', self.selectNote)  # 绑定响应函数
 
         # 显示笔记详细信息
-        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH / 2 - 20, height=WIN_HEIGHT - 30, text='Note Details')
+        self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH*2/3 - 40, height=WIN_HEIGHT - 30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
-        self.detail = Text(self.lf3, bg='#E0FFFF')
-        self.detail.place(x=0, y=0, width=WIN_WIDTH / 2 - 30, height=WIN_HEIGHT - 78)
-        self.saveBtn = Button(self.lf3, text='Save', command=self.saveNote).place(x=170, y=522)
+        self.detail = Text(self.lf3, bg='#E0FFFF', state='disabled', font=("宋体", 14, "normal"))
+        self.detail.place(x=0, y=0, width=WIN_WIDTH*2/3 - 50, height=WIN_HEIGHT - 78)
+        self.detailEditable = False
+        self.saveBtn = Button(self.lf3, text='Save Note', command=self.saveNote).place(x=300, y=522)
+        self.editBtn = Button(self.lf3, text='Edit Note', command=self.editNote).place(x=200, y=522)
 
     # 点击笔记列表显示详细信息
     def selectNote(self, event):
         w = event.widget
         self.selectedItemIndex = int(w.curselection()[0])
+        editTime = self.data[self.selectedItemIndex]['time']
+        timeStr = editTime[0:4] + '-' + editTime[4:6] + '-' + editTime[6:8] + ' ' + editTime[8:10] + ':' + editTime[10:12] + ':' + editTime[12:14]
+        self.detail.config(state='normal')
         self.detail.delete('1.0', END)
         self.detail.insert(INSERT, '\t\t\t' + self.data[self.selectedItemIndex]['title'] + '\n')
         self.detail.insert(END, '\t\t' + ','.join(self.data[self.selectedItemIndex]['tags']) + '\n')
-        editTime = self.data[self.selectedItemIndex]['time']
-        timeStr = editTime[0:4] + '-' + editTime[4:6] + '-' + editTime[6:8] + ' ' + editTime[8:10] + ':' + editTime[10:12] + ':' + editTime[12:14]
         self.detail.insert(END, '\t\t' + timeStr + '\n\n')
         self.detail.insert(END, self.data[self.selectedItemIndex]['description'])
+        self.detail.config(state='disabled')
 
     def searchPage(self, master):
         SearchPage(master, self.data)
@@ -114,3 +119,9 @@ class LandingPage(object):
         self.data[self.selectedItemIndex] = note
         FileUtil.setNoteRecords(self.data)
         self.updateNoteList(self.data)
+        self.detail.config(state='disabled')
+        messagebox.showerror('Succeed', 'Note has been modified!')
+
+    def editNote(self):
+        self.detail.config(state='normal')
+

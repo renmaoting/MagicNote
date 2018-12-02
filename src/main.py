@@ -20,7 +20,7 @@ class MagicNote(object):
         self.frm.place(x=0, y=0)
 
         self.lf1 = LabelFrame(self.frm, width=WIN_WIDTH - 10, height=WIN_HEIGHT - 10, text='Verify Password')
-        self.lf1.grid(row=0, column=0, padx=300, pady=150)
+        self.lf1.grid(row=0, column=0, padx=350, pady=150)
 
         self.entry = Entry(self.lf1, show='*')
         self.entry.grid(row=0, column=0)
@@ -43,7 +43,6 @@ class MagicNote(object):
 
     def verifyPassword(self):
         userInput = str(self.entry.get())
-        print(FileUtil.getPassword().strip() + ' ' + userInput.strip())
         if FileUtil.getPassword().strip() == userInput.strip():
             self.frm.destroy()
             self.frm = Frame(self.root, width=self.width, height=self.height)
