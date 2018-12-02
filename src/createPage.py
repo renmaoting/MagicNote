@@ -21,14 +21,14 @@ class CreatePage(object):
         self.lf1.grid(row=0, column=0, padx=40, pady=30)
 
         Label(self.lf1, text='Title:').grid(row=0)
-        self.title = Entry(self.lf1, width=70)
+        self.title = Entry(self.lf1, width=95)
         self.title.grid(row=0, column=1, columnspan=8, pady=6)
 
         Label(self.lf1, text='Tags:').grid(row=1, column=0)
-        self.tags = Entry(self.lf1, width=70)
+        self.tags = Entry(self.lf1, width=95)
         self.tags.grid(row=1, column=1, columnspan=8, pady=6)
         Label(self.lf1, text='Description:').grid(row=2, column=0)
-        self.description = Text(self.lf1, width=80, height=23, bg='#E0FFFF', font=("宋体", 14, "normal"))
+        self.description = Text(self.lf1, width=95, height=27, bg='#E0FFFF', font=("宋体", 11, "normal"))
         self.description.grid(row=2, column=1, columnspan=6, pady=6)
 
         Button(self.lf1, text='Import Existing Notes', command=lambda: self.chooseFile(data)).grid(row=3, column=2)

@@ -61,7 +61,7 @@ class SearchPage(object):
         # 显示笔记详细信息
         self.lf3 = LabelFrame(self.frm, width=WIN_WIDTH*2/3-100, height=WIN_HEIGHT-30, text='Note Details')
         self.lf3.grid(row=0, column=1, rowspan=2, padx=10, pady=10)
-        self.detail = Text(self.lf3, bg='#E0FFFF', font=("宋体", 14, "normal"), state='disabled')
+        self.detail = Text(self.lf3, bg='#E0FFFF', font=("宋体", 11, "normal"), state='disabled')
         self.detail.place(x=0, y=0, width=WIN_WIDTH*2/3-110, height=WIN_HEIGHT-50)
 
     # 点击笔记列表显示详细信息
